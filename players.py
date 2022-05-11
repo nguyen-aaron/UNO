@@ -1,4 +1,4 @@
-numberofPlayers = input("How many people are playing?")
+numberofPlayers = 4
 playerNameNumber = 0
 def playerListLength(r1, r2):
   return list(range(r1, r2+1))
@@ -11,4 +11,3 @@ for x in range (0, int(numberofPlayers)):
   playerList[playerNameNumber] = input("")
   playerNameNumber = playerNameNumber + 1
   print(playerList)
-
