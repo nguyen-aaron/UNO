@@ -10,4 +10,4 @@ for x in range (0, int(numberofPlayers)):
   print("Player", playerNameNumber+1, "enter name:")
   playerList[playerNameNumber] = input("")
   playerNameNumber = playerNameNumber + 1
-  print(playerList)
+

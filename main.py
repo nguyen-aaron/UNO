@@ -1,18 +1,24 @@
-import math, random, time
+import random
 from players import playerList
-def cardGeneration():
+def game():
   ## card list, 1st character is card value, 2nd character is card color
-  ## S: skip 
-  ## V: reverse 
-  ## T: plus 2
-  ## PF: plus 4 with color change
-  ## CC: color change
+  ## Color Index:
+  ## R = RED
+  ## Y = YELLOW
+  ## B = BLUE
+  ## G = GREEN
+  ## Type Index:
+  ## S: SKIP
+  ## V: REVERSE 
+  ## T: PLUS 2
+  ## PF: PLUS 4 WITH COLOR CHANGE
+  ## CC: COLOR CHANGE
   ## ex: SY = skip yellow, VB = reverse blue, TG = plus 2 green, etc.
   originalSet= ("0R","1R","2R","3R","4R","5R","6R","7R","8R","9R","0Y","1Y","2Y","3Y","4Y","5Y","6Y","7Y","8Y","9Y","0B","1B","2B","3B","4B","5B","6B","7B","8B","9B","0G","1G","2G","3G","4G","5G","6G","7G","8G","9G","SR","SY","SB","SG","VR","VY","VB","VG","TR","TY","TB","TG","CC","PF")
   cards = ["0R","1R","2R","3R","4R","5R","6R","7R","8R","9R","1R","2R","3R","4R","5R","6R","7R","8R","9R","0Y","1Y","2Y","3Y","4Y","5Y","6Y","7Y","8Y","9Y","1Y","2Y","3Y","4Y","5Y","6Y","7Y","8Y","9Y","0B","1B","2B","3B","4B","5B","6B","7B","8B","9B","1B","2B","3B","4B","5B","6B","7B","8B","9B","0G","1G","2G","3G","4G","5G","6G","7G","8G","9G","1G","2G","3G","4G","5G","6G","7G","8G","9G","SR","SR","SY","SY","SB","SB","SG","SG","VR","VR","VY","VY","VB","VB","VG","VG","TR","TR","TY","TY","TB","TB","TG","TG","CC","CC","CC","CC","PF","PF","PF","PF"]
   usedCards = []
   playerCards = []
-  usedCards.append(cards.pop(random.randrange(0,75)))
+  usedCards.append(cards.pop(random.randrange(0,75))) ##generate a random first card
   turn = 0
   displayCardNeeded = True
   isRunning = True
@@ -50,7 +56,7 @@ def cardGeneration():
             if topCard[0] == "S":
               print("SKIP")
             elif topCard[0] == "V":
-                print("REVERSE")
+              print("REVERSE")
             elif topCard[0] == "T":
               print("PLUS TWO")
             elif topCard[0] == "C":
@@ -74,7 +80,7 @@ def cardGeneration():
             if cardPlayed in player1 and cardPlayed[0] == "C" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -99,6 +105,7 @@ def cardGeneration():
               else:
                 turn = 3
               displayCardNeeded = True
+              
             elif cardPlayed in player1 and cardPlayed[0] == "T" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
               usedCards.append(cardPlayed)
               player1.remove(cardPlayed)
@@ -114,8 +121,18 @@ def cardGeneration():
                   player4.append(cards.pop(random.randrange(len(cards))))
                   player4.sort()
               displayCardNeeded = True
-    
-            elif cardPlayed in player1 and cardPlayed[0] == "R" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              
+            elif cardPlayed in player1 and cardPlayed[0] == "S" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              usedCards.append(cardPlayed)
+              player1.remove(cardPlayed)
+              print("Playing", cardPlayed)
+              if reverse == False:
+                turn +=2
+              elif reverse == True:
+                turn = 2
+              displayCardNeeded = True   
+              
+            elif cardPlayed in player1 and cardPlayed[0] == "V" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
               usedCards.append(cardPlayed)
               player1.remove(cardPlayed)
               print("Playing", cardPlayed)
@@ -130,7 +147,7 @@ def cardGeneration():
             elif cardPlayed in player1 and cardPlayed[0] == "P" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -171,6 +188,10 @@ def cardGeneration():
               else:
                 turn = 3
               displayCardNeeded = True
+            elif cardPlayed == "DRAW":
+              player1.append(cards.pop(random.randrange(len(cards))))
+              print("Drawing",player1[-1])
+              player1.sort()
             else:
               print("Invalid Card. Try Again.")
           elif turn == 1:
@@ -180,7 +201,7 @@ def cardGeneration():
             if cardPlayed in player2 and cardPlayed[0] == "C" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to changeto?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -220,8 +241,18 @@ def cardGeneration():
                   player1.append(cards.pop(random.randrange(len(cards))))
                   player1.sort()
               displayCardNeeded = True
+
+            elif cardPlayed in player2 and cardPlayed[0] == "S" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              usedCards.append(cardPlayed)
+              player2.remove(cardPlayed)
+              print("Playing", cardPlayed)
+              if reverse == False:
+                turn +=2
+              elif reverse == True:
+                turn = 3
+              displayCardNeeded = True
     
-            elif cardPlayed in player2 and cardPlayed[0] == "R" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+            elif cardPlayed in player2 and cardPlayed[0] == "V" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
               usedCards.append(cardPlayed)
               player2.remove(cardPlayed)
               print("Playing", cardPlayed)
@@ -236,7 +267,7 @@ def cardGeneration():
             elif cardPlayed in player2 and cardPlayed[0] == "P" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -277,6 +308,10 @@ def cardGeneration():
               else:
                 turn -=1
               displayCardNeeded = True
+            elif cardPlayed == "DRAW":
+              player1.append(cards.pop(random.randrange(len(cards))))
+              print("Drawing",player2[-1])
+              player2.sort()
             else:
               print("Invalid Card. Try Again.")
           elif turn == 2:
@@ -286,7 +321,7 @@ def cardGeneration():
             if cardPlayed in player3 and cardPlayed[0] == "C" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -326,8 +361,17 @@ def cardGeneration():
                   player2.append(cards.pop(random.randrange(len(cards))))
                   player2.sort()
               displayCardNeeded = True
-    
-            elif cardPlayed in player3 and cardPlayed[0] == "R" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+            elif cardPlayed in player3 and cardPlayed[0] == "S" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              usedCards.append(cardPlayed)
+              player3.remove(cardPlayed)
+              print("Playing", cardPlayed)
+              if reverse == False:
+                turn = 0
+              elif reverse == True:
+                turn = 0
+              displayCardNeeded = True
+              
+            elif cardPlayed in player3 and cardPlayed[0] == "V" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
               usedCards.append(cardPlayed)
               player3.remove(cardPlayed)
               print("Playing", cardPlayed)
@@ -335,14 +379,14 @@ def cardGeneration():
                 turn +=1
                 reverse = False
               elif reverse == False:
-                turn +=1
+                turn -=1
                 reverse = True
               displayCardNeeded = True
                   
             elif cardPlayed in player3 and cardPlayed[0] == "P" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -383,6 +427,10 @@ def cardGeneration():
               else:
                 turn -=1
               displayCardNeeded = True
+            elif cardPlayed == "DRAW":
+              player3.append(cards.pop(random.randrange(len(cards))))
+              print("Drawing",player3[-1])
+              player3.sort()
             else:
               print("Invalid Card. Try Again.")
           elif turn == 3:
@@ -392,7 +440,7 @@ def cardGeneration():
             if cardPlayed in player4 and cardPlayed[0] == "C" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -432,23 +480,33 @@ def cardGeneration():
                   player3.append(cards.pop(random.randrange(len(cards))))
                   player3.sort()
               displayCardNeeded = True
-    
-            elif cardPlayed in player4 and cardPlayed[0] == "R" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              
+            elif cardPlayed in player4 and cardPlayed[0] == "S" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
+              usedCards.append(cardPlayed)
+              player4.remove(cardPlayed)
+              print("Playing", cardPlayed)
+              if reverse == False:
+                turn = 1
+              elif reverse == True:
+                turn = 1
+              displayCardNeeded = True
+              
+            elif cardPlayed in player4 and cardPlayed[0] == "V" and (topCard[0] == cardPlayed[0] or topCard[1] == cardPlayed[1]) and cardPlayed in originalSet:
               usedCards.append(cardPlayed)
               player4.remove(cardPlayed)
               print("Playing", cardPlayed)
               if reverse == True:
-                turn +=1
+                turn = 0
                 reverse = False
               elif reverse == False:
-                turn = 0
+                turn -=1
                 reverse = True
               displayCardNeeded = True
                   
             elif cardPlayed in player4 and cardPlayed[0] == "P" and cardPlayed in originalSet:
               colorChangeInProgress = True
               while colorChangeInProgress == True:
-                colorChange = input("What color would you like change?").upper()
+                colorChange = input("What color would you like to change to?").upper()
                 if colorChange == "R":
                   print("RED")
                   colorChangeInProgress = False
@@ -489,6 +547,10 @@ def cardGeneration():
               else:
                 turn -=1
               displayCardNeeded = True
+            elif cardPlayed == "DRAW":
+              player4.append(cards.pop(random.randrange(len(cards))))
+              print("Drawing",player4[-1])
+              player4.sort()
             else:
               print("Invalid Card. Try Again.")
     else:
@@ -503,9 +565,9 @@ def cardGeneration():
       isRunning = False
   
 def main():
-  cardGeneration()
+  game()
   while input("Would you like to play again? (Y/N)").upper() == "Y":
-    cardGeneration()
+    game()
 main()
 
 
